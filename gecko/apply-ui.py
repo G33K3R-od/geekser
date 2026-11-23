@@ -11,62 +11,7 @@ from pathlib import Path
 import sys
 
 OLD_START = "/* GEEKSER M1 PROOF OF CONCEPT — BEGIN */"
-OLD_END = "/* GEEKSER M1 PROOF OF CONCEPT — END */"
-START = "/* GEEKSER M2 SHELL — BEGIN */"
-END = "/* Geekser native command palette */
-#geekser-palette[hidden] { display: none !important; }
-#geekser-palette {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 2147483647 !important;
-  display: flex !important;
-  align-items: flex-start !important;
-  justify-content: center !important;
-  padding-top: min(18vh, 150px) !important;
-  background: rgba(8, 6, 13, .68) !important;
-  backdrop-filter: blur(8px) !important;
-}
-#geekser-palette .geekser-palette-dialog {
-  width: min(660px, calc(100vw - 40px)) !important;
-  max-height: 65vh !important;
-  overflow: auto !important;
-  border: 1px solid #6b5384 !important;
-  border-radius: 18px !important;
-  background: #201a2b !important;
-  box-shadow: 0 24px 80px #0009 !important;
-  padding: 12px !important;
-}
-#geekser-palette .geekser-palette-input {
-  display: block !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-  padding: 17px !important;
-  border: 0 !important;
-  border-bottom: 1px solid #493a57 !important;
-  outline: none !important;
-  background: transparent !important;
-  color: #f5edff !important;
-  font: 17px system-ui !important;
-}
-#geekser-palette .geekser-palette-item {
-  display: block !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-  text-align: left !important;
-  padding: 12px 16px !important;
-  margin: 3px 0 !important;
-  border: 0 !important;
-  border-radius: 10px !important;
-  background: transparent !important;
-  color: #e8dff3 !important;
-  font: 14px system-ui !important;
-  cursor: pointer !important;
-}
-#geekser-palette .geekser-palette-item:hover,
-#geekser-palette .geekser-palette-item[aria-selected="true"] {
-  background: #4b3562 !important;
-}
-/* GEEKSER M2 SHELL — END */"
+OLD_END = "/* GEEKSER M2 SHELL — END */"
 PREF_START = "// GEEKSER M2 DEFAULTS — BEGIN"
 PREF_END = "// GEEKSER M2 DEFAULTS — END"
 
