@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src https: http:; connect-src 'none'">
+<title>Geekser — Settings</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="settings">
+<header class="topbar"><a class="brand" href="index.html"><span class="brand-mark">g<span>.</span></span><span class="brand-name">geekser</span></a><a class="back-link" href="index.html">← New tab</a></header>
+<main class="settings-main">
+<span class="section-kicker">GEEKSER / PREFERENCES</span><h1>Make it <em>yours.</em></h1><p class="settings-description">Manage the destinations on your new tab. Drag cards to rearrange them; changes are saved automatically.</p>
+<section class="settings-panel"><div class="section-heading"><h2>Quick access</h2><span id="count" class="section-count"></span></div><div id="tiles" class="tiles settings-tiles"></div><p id="empty" class="empty" hidden>No shortcuts yet.</p></section>
+<section class="settings-panel"><h2>Add a shortcut</h2><form id="add" class="add-form"><label>Name<input id="name" maxlength="40" placeholder="e.g. GitHub" required></label><label>Website URL<input id="url" type="url" placeholder="https://example.com" required></label><button type="submit">Add shortcut</button></form></section>
+</main>
+<footer><span>GEEKSER / SETTINGS</span><a href="index.html">Back to new tab ↗</a></footer>
+<script src="app.js"></script>
+</body>
+</html>
