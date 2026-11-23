@@ -59,3 +59,13 @@ bash gecko/run.sh ~/dev/firefox
 Check that the first page is Geekser, Ctrl+T opens Geekser rather than Nightly, and navigation and HTTPS security indicators still work. If the native new-tab API fails, capture the Browser Console error; the source patch can be reverted with `python3 gecko/patch-newtab.py ~/dev/firefox --revert` followed by rebuild.
 
 Remaining work: floating command palette, native toolbar restructuring, custom tab previews, compact downloads, identity/branding.
+
+## Batch: native Ctrl+T command launcher (pending runtime validation)
+
+A source-level `gecko/patch-command.py` now adds a browser-chrome command palette to `browser/base/content/browser.js`. It intercepts Ctrl+T, searches open tabs by title, accepts HTTPS URLs and ordinary search queries, and supports arrow keys, Enter and Escape. Ctrl+Shift+T remains untouched. Styling lives in the M2 Gecko CSS patch; offline patch idempotence/rollback tests live in `gecko/test_command.py`.
+
+**Not yet runtime verified.** The browser's own keyboard shortcut dispatch may differ between Firefox versions; verify Ctrl+T opens the overlay, search and tab switching work, Escape dismisses it, and Ctrl+Shift+T still restores a tab. If browser console reports an error, capture the message. Revert with `python3 gecko/patch-command.py ~/dev/firefox --revert` followed by a rebuild.
+
+This is a **first functional launcher**: it does not yet include bookmarks/history/actions search, a configurable search provider, or accessibility focus restoration. Sidebar tab thumbnail cards, toolbar restructuring and downloads popover are still outstanding.
+
+The current search implementation uses Google as a provisional default; provider settings are scheduled for M6. No arbitrary JavaScript/privileged schemes are accepted as direct input.
