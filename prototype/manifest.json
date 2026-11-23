@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Geekser — Home Prototype",
+  "version": "0.1.0",
+  "description": "Local-first Geekser new tab dashboard prototype for Firefox.",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "prototype@geekser.local"
+    }
+  }
+}
