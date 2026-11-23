@@ -129,6 +129,21 @@ BLOCK = r"""
       results.append(item);
     });
   }
+  // Firefox's native XUL keyset can dispatch a command before a window-level
+  // keydown listener gets a chance to handle Ctrl+T. Capture that command
+  // at the chrome document root and prevent the stock new-tab action.
+  function onNativeNewTabCommand(event) {
+    const command = event.target;
+    if (!command || (command.id !== "cmd_newNavigatorTab" &&
+                     command.id !== "key_newNavigatorTab")) {
+      return;
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (panel && !panel.hidden) close();
+    else open();
+  }
+  window.addEventListener("command", onNativeNewTabCommand, true);
   window.addEventListener("keydown", event => {
     if (event.key === "Escape" && panel && !panel.hidden) {
       event.preventDefault();
