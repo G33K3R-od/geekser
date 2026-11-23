@@ -43,3 +43,14 @@ Geekser is an **early-stage Firefox/Gecko-based browser** project. Linux-first. 
 ## Current repository status
 
 Foundation documentation only; no Gecko build or functional browser has been implemented. Treat `ROADMAP.md` as the source of planned milestones, not as evidence of completed features.
+
+## Milestone-sized autonomous execution
+
+The maintainer prefers **complete, reviewable batches**, not a manual confirmation after every small UI change.
+
+- Use `ROADMAP.md` as the milestone sequence. Within an approved milestone, implement related changes and fix regressions without repeatedly requesting approval for routine details.
+- Prefer a coherent working increment over isolated cosmetic commits.
+- Before requesting a manual test, run available static checks and tests; provide **one consolidated test checklist** at the milestone gate.
+- Ask for approval when a decision changes architecture, security/privacy boundaries, licensing, adds external services, or is destructive. Never treat a broad request to proceed as authorization to weaken these safeguards.
+- If local machine access is required, provide a single reproducible command sequence and explain exactly what output is needed.
+- Do not claim to be working in the background after the conversation ends.
