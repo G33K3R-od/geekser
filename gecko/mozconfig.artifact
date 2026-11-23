@@ -1,0 +1,3 @@
+# Geekser M1: Firefox desktop front-end artifact build
+ac_add_options --enable-artifact-builds
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-geekser-artifact
