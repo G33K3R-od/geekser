@@ -18,7 +18,7 @@ user_pref("sidebar.revamp", true);
 user_pref("sidebar.verticalTabs", true);
 user_pref("sidebar.visibility", "always-show");
 user_pref("browser.toolbars.bookmarks.visibility", "never");
-user_pref("browser.startup.page", 1);
+user_pref("browser.startup.page", 0);
 user_pref("browser.startup.homepage", "about:blank");
 user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 user_pref("browser.newtabpage.activity-stream.showSponsored", false);
@@ -27,7 +27,8 @@ user_pref("browser.newtabpage.activity-stream.showSearch", false);
 user_pref("ui.systemUsesDarkTheme", 1);
 PREFS
 
-# The dashboard is loaded on startup as a local file, NOT yet a new-tab override.
+# Source-level new-tab routing reads this pref at browser window startup.
 HOME_URL="file://$ROOT/app/home/index.html"
+printf 'user_pref("geekser.newtab.url", "%s");\\n' "$HOME_URL" >> "$PROFILE/user.js"
 cd "$FIREFOX_SOURCE"
-./mach run --no-remote --profile "$PROFILE" "$HOME_URL"
+./mach run --no-remote --profile "$PROFILE" --new-window "$HOME_URL"
