@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'none'; connect-src 'none'">
+<title>Geekser</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="logo">g<span>.</span><small>geekser</small></div><button id="edit" type="button">Edit shortcuts</button></header>
+<main>
+  <div class="intro"><div class="tag">YOUR WEB. YOUR SPACE.</div><h1>Make the web <span>yours.</span></h1><p>Built by G33K. Made for geeks.</p></div>
+  <form id="search" role="search"><label for="query" class="sr">Search or enter an address</label><span class="glass">⌕</span><input id="query" autocomplete="off" spellcheck="false" placeholder="Search or enter an address…" autofocus><button type="submit">Go ↵</button></form>
+  <div class="heading"><h2>Quick access</h2></div>
+  <div class="tiles" id="tiles"></div>
+  <section id="editor" hidden><h2>Add shortcut</h2><form id="add"><input id="name" maxlength="40" placeholder="Name" aria-label="Shortcut name" required><input id="url" type="url" placeholder="https://example.com" aria-label="Shortcut URL" required><button type="submit">Add</button></form></section>
+</main>
+<footer>GEEKSER / DEVELOPMENT BUILD</footer>
+<script src="app.js"></script>
+</body>
+</html>
