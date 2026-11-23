@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none';">
+  <title>geekser — New Tab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar"><div class="wordmark">g<span>.</span> <small>geekser</small></div><div class="topright"><span id="today"></span><button id="settings" class="subtle" aria-label="Manage shortcuts">Customize</button></div></header>
+    <main>
+      <div class="hero"><div class="eyebrow">YOUR SPACE ON THE WEB</div><h1>Make the web <em>yours.</em></h1><p>Built by G33K. Made for geeks.</p></div>
+      <form id="search-form" class="search" role="search"><span class="search-icon">⌕</span><input id="query" type="text" aria-label="Search or enter address" placeholder="Search or enter an address…" autocomplete="off" spellcheck="false"><kbd>Enter ↵</kbd></form>
+      <div class="section-head"><h2>Quick access</h2><span>Click a tile to open · Customize to edit</span></div>
+      <div id="tiles" class="tiles" aria-live="polite"></div>
+      <section id="editor" class="editor" hidden><h2>Customize shortcuts</h2><form id="add-form" class="add-form"><label>Name<input id="tile-name" maxlength="40" required placeholder="My site"></label><label>URL<input id="tile-url" type="url" required placeholder="https://example.com"></label><button type="submit">Add shortcut</button></form><p class="hint">Changes are saved locally in Firefox. Use the Remove button on a tile to delete it.</p></section>
+    </main>
+    <footer><span>GEEKSER / EARLY PROTOTYPE</span><span>Firefox · Gecko</span></footer>
+  </div>
+  <script src="newtab.js"></script>
+</body>
+</html>
