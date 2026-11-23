@@ -28,3 +28,4 @@ jobs:
           PY
           node --check /tmp/geekser-command.js
           node --check app/home/app.js
+          node --check app/home/modules.js
