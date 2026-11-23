@@ -89,20 +89,44 @@ BLOCK = r"""
     }
     return "https://www.google.com/search?q=" + encodeURIComponent(q);
   }
+  // Local, privacy-preserving suggestions while a native Places provider is pending.
+  // Suggestions combine open tabs, known destinations and typed URL candidates.
+  const destinations = [
+    ["Google", "https://www.google.com/"],
+    ["Google Maps", "https://maps.google.com/"],
+    ["Google Play", "https://play.google.com/"],
+    ["Google AI Studio", "https://aistudio.google.com/"],
+    ["GitHub", "https://github.com/"],
+    ["GitHub Issues", "https://github.com/issues"],
+    ["YouTube", "https://www.youtube.com/"],
+    ["Wikipedia", "https://www.wikipedia.org/"],
+    ["Mozilla", "https://www.mozilla.org/"],
+    ["Reddit", "https://www.reddit.com/"]
+  ];
   function render() {
     const q = input.value.trim();
+    const query = q.toLowerCase();
     const matchingTabs = Array.from(gBrowser.tabs)
       .filter(tab => !tab.closing)
-      .filter(tab => !q || (tab.label || "").toLowerCase().includes(q.toLowerCase()))
-      .slice(0, 7);
+      .filter(tab => !q || (tab.label || "").toLowerCase().includes(query) ||
+        (tab.linkedBrowser?.currentURI?.spec || "").toLowerCase().includes(query))
+      .slice(0, 6);
     candidates = matchingTabs.map(tab => ({
-      label: "Switch to: " + (tab.label || "Tab"),
+      label: "Tab · " + (tab.label || "Untitled"),
       run: () => { gBrowser.selectedTab = tab; }
     }));
     if (q) {
+      const matches = destinations
+        .filter(([name, url]) => name.toLowerCase().includes(query) ||
+          new URL(url).hostname.toLowerCase().includes(query))
+        .slice(0, 5);
+      candidates.push(...matches.map(([name, url]) => ({
+        label: "Website · " + name,
+        run: () => { gBrowser.selectedTab = gBrowser.addTrustedTab(url); }
+      })));
       const url = targetURL(q);
       if (url) candidates.unshift({
-        label: "Open: " + q,
+        label: (url.includes("/search?q=") ? "Search · " : "Open · ") + q,
         run: () => { gBrowser.selectedTab = gBrowser.addTrustedTab(url); }
       });
     } else {
