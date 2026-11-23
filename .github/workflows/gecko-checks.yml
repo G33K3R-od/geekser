@@ -27,3 +27,4 @@ jobs:
           Path("/tmp/geekser-command.js").write_text(ast.literal_eval(block))
           PY
           node --check /tmp/geekser-command.js
+          node --check app/home/app.js
