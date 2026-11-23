@@ -4,19 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'none'; connect-src 'none'">
-<title>Geekser</title>
+<title>Geekser — New tab</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><div class="logo">g<span>.</span><small>geekser</small></div><button id="edit" type="button">Edit shortcuts</button></header>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Geekser home"><span class="brand-mark">g<span>.</span></span><span class="brand-name">geekser</span></a>
+  <div class="top-actions"><span id="clock" aria-label="Local time"></span><button id="edit" type="button" aria-expanded="false" aria-controls="editor">Customize</button></div>
+</header>
 <main>
-  <div class="intro"><div class="tag">YOUR WEB. YOUR SPACE.</div><h1>Make the web <span>yours.</span></h1><p>Built by G33K. Made for geeks.</p></div>
-  <form id="search" role="search"><label for="query" class="sr">Search or enter an address</label><span class="glass">⌕</span><input id="query" autocomplete="off" spellcheck="false" placeholder="Search or enter an address…" autofocus><button type="submit">Go ↵</button></form>
-  <div class="heading"><h2>Quick access</h2></div>
-  <div class="tiles" id="tiles"></div>
-  <section id="editor" hidden><h2>Add shortcut</h2><form id="add"><input id="name" maxlength="40" placeholder="Name" aria-label="Shortcut name" required><input id="url" type="url" placeholder="https://example.com" aria-label="Shortcut URL" required><button type="submit">Add</button></form></section>
+  <div class="eyebrow"><span class="signal"></span> YOUR WEB. YOUR SPACE.</div>
+  <section class="hero"><h1>Make the web <em>yours.</em></h1><p>Built by G33K. Made for geeks.</p></section>
+  <form id="search" role="search"><label for="query" class="sr">Search or enter an address</label><span class="search-icon" aria-hidden="true">⌕</span><input id="query" autocomplete="off" spellcheck="false" placeholder="Search anything or enter a URL…" autofocus><span class="key-hint" aria-hidden="true">↵</span><button type="submit">Go</button></form>
+  <section class="shortcuts" aria-label="Quick access">
+    <div class="section-heading"><div><span class="section-kicker">YOUR FAVORITES</span><h2>Quick access</h2></div><span class="drag-hint" id="drag-hint" hidden>Drag to reorder · or use arrows</span></div>
+    <div class="tiles" id="tiles"></div>
+    <p class="empty" id="empty" hidden>No shortcuts yet. Select Customize to add your first one.</p>
+  </section>
+  <section id="editor" class="editor" hidden aria-label="Shortcut editor">
+    <div class="editor-heading"><h2>Add a shortcut</h2><p>Shortcuts are saved in this browser profile.</p></div>
+    <form id="add"><label>Name<input id="name" maxlength="40" placeholder="e.g. GitHub" required></label><label>Website<input id="url" type="url" placeholder="https://example.com" required></label><button type="submit">Add shortcut</button></form>
+    <p class="editor-note">While customizing, drag cards or use their arrow buttons to change the order.</p>
+  </section>
 </main>
-<footer>GEEKSER / DEVELOPMENT BUILD</footer>
+<footer><span>GEEKSER</span><span>DEVELOPMENT BUILD</span><span>GECKO ENGINE</span></footer>
 <script src="app.js"></script>
 </body>
 </html>
