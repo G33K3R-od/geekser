@@ -102,7 +102,8 @@ CSS = """
   overflow: auto !important;
   border: 1px solid #6b5384 !important;
   border-radius: 18px !important;
-  background: #201a2b !important;
+  background: rgba(29, 28, 36, .88) !important;
+  backdrop-filter: blur(24px) saturate(1.2) !important;
   box-shadow: 0 24px 80px #0009 !important;
   padding: 12px !important;
 }
@@ -112,7 +113,7 @@ CSS = """
   width: 100% !important;
   padding: 17px !important;
   border: 0 !important;
-  border-bottom: 1px solid #493a57 !important;
+  border-bottom: 1px solid #ffffff24 !important;
   outline: none !important;
   background: transparent !important;
   color: #f5edff !important;
@@ -134,7 +135,7 @@ CSS = """
 }
 #geekser-palette .geekser-palette-item:hover,
 #geekser-palette .geekser-palette-item[aria-selected="true"] {
-  background: #4b3562 !important;
+  background: #ffffff18 !important;
 }
 /* GEEKSER M2 SHELL — END */
 """
