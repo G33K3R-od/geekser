@@ -1,69 +1,160 @@
 #!/usr/bin/env python3
-"""Apply or check a minimal, reversible Geekser browser-chrome CSS proof of concept.
+"""Apply Geekser M2 browser-chrome styling and defaults to a Firefox source tree.
 
-Run from the Geekser repository: python3 gecko/apply-ui.py /path/to/firefox
-This edits a Firefox source checkout, NOT a system Firefox installation.
+Only modifies browser theme CSS and browser/app/profile/firefox.js.
+Reversible, idempotent, and fails closed if expected source paths change.
 """
 from __future__ import annotations
+
 import argparse
 from pathlib import Path
 import sys
 
-START = "/* GEEKSER M1 PROOF OF CONCEPT — BEGIN */"
-END = "/* GEEKSER M1 PROOF OF CONCEPT — END */"
-CSS = f"""\n{START}
-/* Deliberately tiny, visible and reversible. Keep security indicators intact. */
-#navigator-toolbox {{
+OLD_START = "/* GEEKSER M1 PROOF OF CONCEPT — BEGIN */"
+OLD_END = "/* GEEKSER M1 PROOF OF CONCEPT — END */"
+START = "/* GEEKSER M2 SHELL — BEGIN */"
+END = "/* GEEKSER M2 SHELL — END */"
+PREF_START = "// GEEKSER M2 DEFAULTS — BEGIN"
+PREF_END = "// GEEKSER M2 DEFAULTS — END"
+
+CSS = """
+/* GEEKSER M2 SHELL — BEGIN */
+/* These are browser chrome selectors, not content-page styling.
+   Native Firefox sidebar/tabs remain functional. Security indicators remain visible. */
+:root {
+  --geekser-canvas: #15121d;
+  --geekser-panel: #201a2b;
+  --geekser-hover: #342941;
   --geekser-accent: #b38cf2;
-}}
-#urlbar[focused] #urlbar-background {{
+  --geekser-text: #f2eafa;
+  --geekser-muted: #a99bb9;
+  --toolbarbutton-border-radius: 11px;
+}
+#navigator-toolbox {
+  background: var(--geekser-canvas) !important;
+  border-bottom: 1px solid #393044 !important;
+  color: var(--geekser-text) !important;
+}
+#nav-bar {
+  background: var(--geekser-canvas) !important;
+  padding-block: 5px !important;
+}
+#urlbar-background {
+  background: var(--geekser-panel) !important;
+  border: 1px solid #4a3b58 !important;
+  border-radius: 13px !important;
+}
+#urlbar[focused] #urlbar-background,
+#urlbar[open] #urlbar-background {
   outline: 2px solid var(--geekser-accent) !important;
   outline-offset: -2px;
-}}
-{END}
+}
+#urlbar-input {
+  color: var(--geekser-text) !important;
+}
+#urlbar-input::placeholder {
+  color: var(--geekser-muted) !important;
+}
+#nav-bar toolbarbutton:hover > .toolbarbutton-icon,
+#nav-bar toolbarbutton:hover > .toolbarbutton-badge-stack {
+  background-color: var(--geekser-hover) !important;
+}
+#sidebar-main,
+#sidebar-box,
+#vertical-tabs {
+  background: var(--geekser-canvas) !important;
+  color: var(--geekser-text) !important;
+}
+#sidebar-main .tab-background,
+#vertical-tabs .tab-background {
+  border-radius: 11px !important;
+}
+#sidebar-main .tabbrowser-tab[selected] .tab-background,
+#vertical-tabs .tabbrowser-tab[selected] .tab-background {
+  background: #463359 !important;
+  outline: 1px solid #8662b4 !important;
+}
+#sidebar-main .tabbrowser-tab:hover .tab-background,
+#vertical-tabs .tabbrowser-tab:hover .tab-background {
+  background: var(--geekser-hover) !important;
+}
+#PersonalToolbar {
+  background: var(--geekser-canvas) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #navigator-toolbox, #sidebar-main { transition: none !important; }
+}
+/* GEEKSER M2 SHELL — END */
 """
-CANDIDATES = [
+PREFS = """
+// GEEKSER M2 DEFAULTS — BEGIN
+// Default preferences only; existing user choices take precedence.
+pref("sidebar.revamp", true);
+pref("sidebar.verticalTabs", true);
+pref("sidebar.visibility", "always-show");
+pref("browser.toolbars.bookmarks.visibility", "never");
+// GEEKSER M2 DEFAULTS — END
+"""
+CSS_PATHS = [
     "browser/themes/shared/browser-shared.css",
     "browser/themes/shared/browser.css",
 ]
+PREF_PATH = "browser/app/profile/firefox.js"
+
+
+def remove_block(content: str, start: str, end: str) -> str:
+    has_start, has_end = start in content, end in content
+    if has_start != has_end:
+        raise ValueError(f"incomplete block: {start}")
+    if not has_start:
+        return content
+    if content.count(start) != 1 or content.count(end) != 1:
+        raise ValueError(f"duplicate block: {start}")
+    a = content.index(start)
+    b = content.index(end, a) + len(end)
+    return content[:a] + content[b:]
+
 
 def main() -> int:
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("firefox_source", type=Path)
-    p.add_argument("--check", action="store_true", help="report whether patch is present")
-    p.add_argument("--revert", action="store_true", help="remove only our marked CSS")
-    args = p.parse_args()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("firefox_source", type=Path)
+    action = parser.add_mutually_exclusive_group()
+    action.add_argument("--check", action="store_true")
+    action.add_argument("--revert", action="store_true")
+    args = parser.parse_args()
     root = args.firefox_source.expanduser().resolve()
     if not (root / "mach").is_file() or not (root / "browser").is_dir():
-        p.error(f"not a Firefox source checkout: {root}")
-    target = next((root / path for path in CANDIDATES if (root / path).is_file()), None)
-    if target is None:
-        print("Firefox CSS location changed; inspect upstream and update CANDIDATES.", file=sys.stderr)
+        parser.error(f"not a Firefox checkout: {root}")
+    css_path = next((root / p for p in CSS_PATHS if (root / p).is_file()), None)
+    pref_path = root / PREF_PATH
+    if css_path is None or not pref_path.is_file():
+        print("Upstream Firefox paths changed; refusing to patch.", file=sys.stderr)
         return 2
-    original = target.read_text(encoding="utf-8")
-    has_start = START in original
-    has_end = END in original
-    if has_start != has_end:
-        print("Incomplete Geekser marker block; refusing to edit.", file=sys.stderr)
-        return 2
+    original_css = css_path.read_text(encoding="utf-8")
+    original_prefs = pref_path.read_text(encoding="utf-8")
     if args.check:
-        print(f"{target}: {'patched' if has_start else 'not patched'}")
-        return 0 if has_start else 1
-    if args.revert:
-        if not has_start:
-            print("No Geekser patch to revert.")
-            return 0
-        start = original.index(START)
-        end = original.index(END, start) + len(END)
-        updated = original[:start].rstrip("\n") + original[end:]
-    else:
-        if has_start:
-            print(f"Already patched: {target}")
-            return 0
-        updated = original.rstrip("\n") + "\n" + CSS
-    target.write_text(updated, encoding="utf-8")
-    print(f"{'Reverted' if args.revert else 'Applied'} Geekser browser-chrome patch: {target}")
+        ok = START in original_css and END in original_css and PREF_START in original_prefs and PREF_END in original_prefs
+        print("Geekser M2 patch: " + ("installed" if ok else "not installed"))
+        return 0 if ok else 1
+    try:
+        new_css = remove_block(remove_block(original_css, OLD_START, OLD_END), START, END)
+        new_prefs = remove_block(original_prefs, PREF_START, PREF_END)
+    except ValueError as exc:
+        print(f"Refusing unsafe patch: {exc}", file=sys.stderr)
+        return 2
+    if not args.revert:
+        new_css = new_css.rstrip("\n") + "\n" + CSS
+        new_prefs = new_prefs.rstrip("\n") + "\n" + PREFS
+    # Validate both files before writing either.
+    if new_css != original_css:
+        css_path.write_text(new_css, encoding="utf-8")
+    if new_prefs != original_prefs:
+        pref_path.write_text(new_prefs, encoding="utf-8")
+    print(("Reverted" if args.revert else "Applied") + " Geekser source changes:")
+    print(" -", css_path)
+    print(" -", pref_path)
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
