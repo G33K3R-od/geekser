@@ -1,0 +1,19 @@
+/* Geekser experimental Firefox chrome. No security UI is hidden. */
+:root {
+  --geekser-bg: #15131c;
+  --geekser-surface: #211d2b;
+  --geekser-accent: #b28bf2;
+}
+#navigator-toolbox {
+  background-color: var(--geekser-bg) !important;
+}
+#nav-bar {
+  background-color: var(--geekser-bg) !important;
+}
+#urlbar-background {
+  background-color: var(--geekser-surface) !important;
+  border-radius: 12px !important;
+}
+#urlbar[focused] #urlbar-background {
+  outline: 1px solid var(--geekser-accent) !important;
+}
