@@ -1,0 +1,29 @@
+name: Gecko patch checks
+on:
+  push:
+    paths:
+      - 'gecko/**'
+      - '.github/workflows/gecko-checks.yml'
+  pull_request:
+    paths:
+      - 'gecko/**'
+      - '.github/workflows/gecko-checks.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Python syntax
+        run: python3 -m compileall -q gecko
+      - name: Run patcher unit tests
+        run: python3 -m unittest discover -s gecko -p 'test_*.py'
+      - name: Check embedded JavaScript syntax
+        run: |
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          source = ast.parse(Path("gecko/patch-command.py").read_text())
+          block = next(node.value for node in source.body if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "BLOCK" for t in node.targets))
+          Path("/tmp/geekser-command.js").write_text(ast.literal_eval(block))
+          PY
+          node --check /tmp/geekser-command.js
