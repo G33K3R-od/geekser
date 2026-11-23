@@ -11,6 +11,7 @@ FIREFOX_SOURCE="$(cd "$FIREFOX_SOURCE" && pwd)"
 export MOZCONFIG="$ROOT/gecko/mozconfig.artifact"
 python3 "$ROOT/gecko/apply-ui.py" "$FIREFOX_SOURCE"
 python3 "$ROOT/gecko/patch-newtab.py" "$FIREFOX_SOURCE"
+python3 "$ROOT/gecko/patch-command.py" "$FIREFOX_SOURCE"
 cd "$FIREFOX_SOURCE"
 printf 'Firefox revision: '; git rev-parse HEAD
 printf 'Mozconfig: %s\n' "$MOZCONFIG"
