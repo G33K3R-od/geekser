@@ -1,27 +1,3 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src https: http:; connect-src 'none'">
-<title>Geekser — New tab</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body class="home">
-<div class="ambient" aria-hidden="true"><div class="ambient-grid"></div><div class="ambient-orbit orbit-one"></div><div class="ambient-orbit orbit-two"></div></div>
-<header class="topbar">
-  <div class="brand"><span class="brand-mark">g<span>.</span></span><span class="brand-name">geekser</span></div>
-  <span class="build-label">BUILT BY G33K <span>•</span> MADE FOR GEEKS</span>
-</header>
-<main class="home-main">
-  <section class="welcome" aria-label="Welcome"><span class="welcome-index">01 / YOUR SPACE</span><h1>The web.<br><em>Your way.</em></h1><p>A little less noise. A lot more room to explore.</p></section>
-  <section class="shortcuts" aria-label="Quick access">
-    <div class="section-heading"><span class="section-kicker">PINNED DESTINATIONS</span><span class="section-count" id="count"></span></div>
-    <div class="tiles" id="tiles"></div>
-    <p class="empty" id="empty" hidden>No shortcuts yet. Add some in <a href="settings.html">Geekser settings</a>.</p>
-  </section>
-</main>
-<footer><span>GEEKSER <span class="footer-divider">/</span> DEVELOPMENT BUILD</span><a href="settings.html" aria-label="Open Geekser settings">Settings <span aria-hidden="true">↗</span></a></footer>
-<script src="app.js"></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src https: http:; connect-src 'none'"><title>Geekser — New tab</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="modules.css"></head>
+<body class="home"><div class="wallpaper" aria-hidden="true"></div><main id="workspace" class="workspace" aria-label="Customizable new tab"><section id="module-header" class="module" data-module="header"><div class="hero-brand">geekser<span>.</span></div><p id="hero-subtitle">Built by G33K. Made for geeks.</p></section><section id="module-shortcuts" class="module" data-module="shortcuts"><div id="tiles" class="tiles"></div><p id="empty" class="empty" hidden>No shortcuts. Add them in your layout settings.</p></section><section id="module-clock" class="module" data-module="clock"><time id="clock"></time><span id="date"></span></section></main><button id="layout-toggle" class="layout-toggle" type="button" aria-label="Edit new tab layout" title="Edit layout">⚙</button><aside id="layout-editor" class="layout-editor" hidden><div class="layout-editor-head"><strong>Customize new tab</strong><button id="layout-close" aria-label="Close editor" type="button">×</button></div><p>Drag modules to move them. Resize with the corner handle.</p><label><input id="show-header" type="checkbox"> Heading</label><label><input id="show-shortcuts" type="checkbox"> Shortcuts</label><label><input id="show-clock" type="checkbox"> Clock</label><label>Heading text<input id="heading-text" maxlength="80"></label><label>Subtitle<input id="subtitle-text" maxlength="140"></label><label>Background<select id="wallpaper-select"><option value="slate">Slate</option><option value="ink">Ink</option><option value="violet">Violet</option></select></label><div class="layout-actions"><button id="add-shortcut" type="button">Add shortcut</button><button id="reset-layout" type="button">Reset layout</button></div><p class="layout-note">Browser-wide preferences remain in Firefox settings.</p></aside><dialog id="shortcut-dialog"><form id="shortcut-form" method="dialog"><h2>Add shortcut</h2><label>Name<input id="shortcut-name" required maxlength="40"></label><label>URL<input id="shortcut-url" type="url" required placeholder="https://example.com"></label><div class="dialog-actions"><button value="cancel" formnovalidate>Cancel</button><button id="shortcut-save" value="save">Save</button></div></form></dialog><script src="modules.js"></script></body></html>
