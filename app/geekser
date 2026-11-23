@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+# Resolve symlinks so ~/.local/bin/geekser can point to a checkout on any drive.
+SOURCE="${BASH_SOURCE[0]}"
+while [[ -L "$SOURCE" ]]; do
+  LINK_DIR="$(cd -P -- "$(dirname -- "$SOURCE")" && pwd)"
+  TARGET="$(readlink -- "$SOURCE")"
+  if [[ "$TARGET" = /* ]]; then
+    SOURCE="$TARGET"
+  else
+    SOURCE="$LINK_DIR/$TARGET"
+  fi
+done
+SCRIPT_DIR="$(cd -P -- "$(dirname -- "$SOURCE")" && pwd)"
+ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+
 PROFILE="${XDG_DATA_HOME:-$HOME/.local/share}/geekser/firefox-profile"
 FIREFOX_BIN="${GEEKSER_FIREFOX_BIN:-firefox}"
 mkdir -p "$PROFILE/chrome"
@@ -11,14 +24,11 @@ if ! command -v "$FIREFOX_BIN" >/dev/null 2>&1; then
   exit 1
 fi
 
-# Keep existing preferences and user customizations between launches.
 if [[ ! -f "$PROFILE/.geekser-initialized" ]]; then
   cp "$ROOT/app/user.js" "$PROFILE/user.js"
   cp "$ROOT/app/userChrome.css" "$PROFILE/chrome/userChrome.css"
   touch "$PROFILE/.geekser-initialized"
 fi
 
-# An actual Firefox/Gecko process with a dedicated Geekser profile.
-# The home page is a local file until browser-chrome integration is implemented.
 HOME_URL="file://$ROOT/app/home/index.html"
 exec "$FIREFOX_BIN" --no-remote --profile "$PROFILE" --new-window "$HOME_URL" "$@"
